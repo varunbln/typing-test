@@ -20,17 +20,27 @@ const getRandomWords = () => {
 }
 
 export function TypingArea() {
-    let textToType = getRandomWords();
-    let initialText = [];
-    for (let i = 0; i < textToType.length; i++) {
-        initialText.push({ letter: textToType[i], entered: "false" });
-    }
+    const [textToType, setTextToType] = useState("");
 
-    let [text, setText] = useState(initialText);
+    useEffect(() => {
+        const randomWords = getRandomWords();
+        setTextToType(randomWords);
+    }, []);
+
+    let [text, setText] = useState([]);
+
+    useEffect(() => {
+        setText(textToType.split("").map((letter) => ({ letter: letter, entered: "false" })));
+    }, [textToType]);
+
+    console.log(text);
+
     let [currentLetter, setCurrentLetter] = useState(0);
 
     const resetBox = () => {
-        setText([initialText]);
+        const randomWords = getRandomWords();
+        setTextToType(randomWords);
+        setText(textToType.split("").map((letter) => ({ letter: letter, entered: "false" })));
         setCurrentLetter(0);
     }
 
@@ -58,6 +68,7 @@ export function TypingArea() {
         console.log(event.code);
         if (event.code === "Tab") {
             resetBox();
+            event.preventDefault();
             return;
         }
         if (event.code === "Backspace") {
@@ -74,15 +85,8 @@ export function TypingArea() {
         return () => document.removeEventListener("keydown", keyDownHandler);
     }, [keyDownHandler]);
 
-    // Fix for client server mismatch when generating random string
-    const [hydrated, setHydrated] = useState(false);
-    useEffect(() => {
-        setHydrated(true);
-    }, []);
-    if (!hydrated) return null;
-
     return (
-        <div id="typing-area" className="w-full h-full bg-inherit text-3xl pl-20 pr-20">
+        <div id="typing-area" autoFocus className="w-full h-full bg-inherit text-3xl pl-20 pr-20">
             {text.map((data, i) => {
                 if (i === currentLetter) {
                     return (
