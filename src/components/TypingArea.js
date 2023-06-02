@@ -1,15 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from 'react'
-
-const textToType = `hello world how do you do on this fine day
-hello world how do you do on this fine day
-hello world how do you do on this fine day
-hello world how do you do on this fine day
-hello world how do you do on this fine day
-hello world how do you do on this fine day
-hello world how do you do on this fine day  
-`;
+import { wordsList } from '../utils/wordsList.js'
 
 const isLetter = (str) => {
     if (str === "Space") return " ";
@@ -18,8 +10,17 @@ const isLetter = (str) => {
     return false;
 }
 
-export function TypingArea() {
+const getRandomWords = () => {
+    let words = wordsList.split(" ");
+    let randomWords = [];
+    for (let i = 0; i < 30; i++) {
+        randomWords.push(words[Math.floor(Math.random() * words.length)]);
+    }
+    return randomWords.join(" ");
+}
 
+export function TypingArea() {
+    let textToType = getRandomWords();
     let initialText = [];
     for (let i = 0; i < textToType.length; i++) {
         initialText.push({ letter: textToType[i], entered: "false" });
@@ -73,8 +74,15 @@ export function TypingArea() {
         return () => document.removeEventListener("keydown", keyDownHandler);
     }, [keyDownHandler]);
 
+    // Fix for client server mismatch when generating random string
+    const [hydrated, setHydrated] = useState(false);
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+    if (!hydrated) return null;
+
     return (
-        <div id="typing-area" className="w-full h-full bg-inherit text-3xl">
+        <div id="typing-area" className="w-full h-full bg-inherit text-3xl pl-20 pr-20">
             {text.map((data, i) => {
                 if (i === currentLetter) {
                     return (
