@@ -7,11 +7,19 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      animation: {
+        blink: 'blink .7s infinite',
       },
+      keyframes: {
+        blink: {
+          '0%': {
+            "border-color": "#111827"
+          },
+          '100%': {
+            "border-color": "#e5e7eb"
+          }
+        }
+      }
     },
   },
   plugins: [],
