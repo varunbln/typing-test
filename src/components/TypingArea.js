@@ -13,7 +13,7 @@ const isLetter = (str) => {
 const getRandomWords = () => {
     let words = wordsList.split(" ");
     let randomWords = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 35; i++) {
         randomWords.push(words[Math.floor(Math.random() * words.length)]);
     }
     return randomWords.join(" ");
@@ -88,15 +88,7 @@ export function TypingArea() {
     return (
         <div id="typing-area" autoFocus className="w-full h-full bg-inherit text-3xl pl-20 pr-20">
             {text.map((data, i) => {
-                if (i === currentLetter) {
-                    return (
-                        <span>
-                            <span className="h-3 animate-blink border-r-2 border-r-gray-200"></span>
-                            <span key={i} className="text-gray-700">{data.letter}</span>
-                        </span>
-                    )
-                }
-                return <span key={i} className={(i === currentLetter ? "animate-blink border-l-2" : "") + " " + (data.letter === " " ? "ml-[0.3rem]" : "ml-[0.05rem]") + " box-border " + (data.entered === "false" ? "text-gray-700" : (data.entered === "wrong" ? "text-red-900" : "text-gray-300"))}>{data.letter}</span>
+                return <span key={i} className={(i === currentLetter ? "animate-blink border-l-2" : "border-l-2 border-gray-900") + " " + (data.letter === " " ? "ml-[0.3rem]" : "ml-[0.05rem]") + " box-border " + (data.entered === "false" ? "text-gray-700" : (data.entered === "wrong" ? "text-red-900" : "text-gray-300"))}>{data.letter}</span>
             })}
         </div>
     );
