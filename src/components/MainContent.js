@@ -111,7 +111,7 @@ export function MainContent() {
     }
 
     return (
-        <div className="row-span-1 col-span-6 grid grid-rows-[1fr_4fr_1fr] m-20">
+        <div className="row-span-1 col-span-6 grid grid-rows-[1fr_3fr_1fr] mt-10 mr-20 ml-20">
             <div id="settings" className="row-span-1">
 
             </div>
@@ -131,6 +131,10 @@ export function MainContent() {
             }
             <div id="instructions" className="row-span-1">
                 <p className="text-center">Press <span className="text-gray-200">TAB</span> to restart test.</p>
+                <p className="text-center mt-5">By Varun Prahlad Balani:
+                    <a className="text-gray-200 pl-3" href="https://github.com/varun-balani"> Github</a>
+                    <a className="text-gray-200 pl-3" href="https://www.linkedin.com/in/varun-prahlad-balani-961438200/">LinkedIn</a>
+                </p>
             </div>
         </div>
     );
