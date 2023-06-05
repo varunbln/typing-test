@@ -7,7 +7,7 @@ import { wordsList } from '../utils/wordsList.js'
 const getRandomWords = () => {
     let words = wordsList.split(" ");
     let randomWords = [];
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 60; i++) {
         randomWords.push(words[Math.floor(Math.random() * words.length)]);
     }
     randomWords = randomWords.join(" ");
