@@ -1,14 +1,136 @@
+"use client";
+
 import { TypingArea } from "./TypingArea";
+import { useCallback, useEffect, useState } from "react";
+import { wordsList } from '../utils/wordsList.js'
+
+const getRandomWords = () => {
+    let words = wordsList.split(" ");
+    let randomWords = [];
+    for (let i = 0; i < 40; i++) {
+        randomWords.push(words[Math.floor(Math.random() * words.length)]);
+    }
+    randomWords = randomWords.join(" ");
+    return randomWords.replace("  ", " ");
+}
 
 export function MainContent() {
+
+    const totalTime = 30;
+
+    const [done, setDone] = useState(false);
+    const [timer, setTimer] = useState(0);
+    const [words, setWords] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!done) {
+                setTimer(prevTimer => {
+                    if (prevTimer === totalTime) {
+                        setDone(true);
+                        return 0;
+                    }
+                    return prevTimer + 1;
+                });
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [done]);
+
+    const keyDownHandler = useCallback((event) => {
+        if (event.code === "Tab") {
+            setTimer(0);
+            setDone(!done);
+            setWords(0);
+            setTextToType(getRandomWords());
+            setText(textToType.split("").map((letter) => ({ letter: letter, entered: "false" })));
+            event.preventDefault();
+            return;
+        }
+    });
+
+    useEffect(() => {
+        document.addEventListener("keydown", keyDownHandler);
+        return () => document.removeEventListener("keydown", keyDownHandler);
+    }, [keyDownHandler]);
+
+    const calculateRemainingTime = (currentTime) => {
+        return (totalTime - currentTime);
+    }
+
+    const [textToType, setTextToType] = useState("");
+
+    useEffect(() => {
+        const randomWords = getRandomWords();
+        setTextToType(randomWords);
+    }, []);
+
+    let [text, setText] = useState([]);
+
+    useEffect(() => {
+        setText(textToType.split("").map((letter) => ({ letter: letter, entered: "false" })));
+    }, [textToType]);
+
+
+    const calculateWPM = () => {
+        let words = 0;
+        let correct = true;
+        for (let letter in text) {
+            if (text[letter].entered === "wrong") {
+                correct = false;
+                continue;
+            }
+            if (text[letter].entered === "false") {
+                correct = false;
+                continue;
+            }
+            if (text[letter].letter === " ") {
+                if (correct) words++;
+                correct = true;
+                continue;
+            }
+        }
+        return ((words * 60) / totalTime);
+    }
+
+    const calculateRawWPM = () => {
+        let words = 0;
+        let correct = true;
+        for (let letter in text) {
+            if (text[letter].entered === "false") {
+                correct = false;
+                continue;
+            }
+            if (text[letter].letter === " ") {
+                if (correct) words++;
+                correct = true;
+                continue;
+            }
+        }
+        return ((words * 60) / totalTime);
+    }
+
     return (
-        <div className="row-span-1 col-span-6 grid grid-rows-[2fr_4fr_2fr] m-20">
+        <div className="row-span-1 col-span-6 grid grid-rows-[1fr_4fr_1fr] m-20">
             <div id="settings" className="row-span-1">
 
             </div>
-            <TypingArea />
+            {done ?
+                <div id="stats-display">
+                    <div id="wpm-display" className="font-black text-8xl text-center text-gray-100 ">WPM: {calculateWPM()}</div>
+                    <div className="font-semibold text-2xl text-center mt-5 mb-8 text-gray-400">Raw WPM: {calculateRawWPM()}</div>
+                    <p className="text-center">WPM indicates the number of correct words typed per minute.</p>
+                    <p className="text-center"> Raw WPM indicates the total number of words typed per minute, correct or not.</p>
+                </div> :
+                <div id="main-container">
+                    <div id="timer">
+                        <p className="text-xl pl-20 text-gray-400 font-bold">Remaining Time: {calculateRemainingTime(timer)}</p>
+                    </div>
+                    <TypingArea setTimer={setTimer} setWords={setWords} text={text} setText={setText} textToType={textToType} setTextToType={setTextToType} getRandomWords={getRandomWords} />
+                </div>
+            }
             <div id="instructions" className="row-span-1">
-
+                <p className="text-center">Press <span className="text-gray-200">TAB</span> to restart test.</p>
             </div>
         </div>
     );

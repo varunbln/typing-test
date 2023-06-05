@@ -14,4 +14,12 @@ html {
     -ms-user-select: none;
     /* Internet Explorer/Edge */
     user-select: none;
+
+    margin: 0;
+
+    height: 100%;
+
+    width: 100%;
+    
+    overflow: hidden
 }

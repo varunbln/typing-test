@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from 'react'
-import { wordsList } from '../utils/wordsList.js'
 
 const isLetter = (str) => {
     if (str === "Space") return " ";
@@ -10,38 +9,15 @@ const isLetter = (str) => {
     return false;
 }
 
-const getRandomWords = () => {
-    let words = wordsList.split(" ");
-    let randomWords = [];
-    for (let i = 0; i < 35; i++) {
-        randomWords.push(words[Math.floor(Math.random() * words.length)]);
-    }
-    return randomWords.join(" ");
-}
-
-export function TypingArea() {
-    const [textToType, setTextToType] = useState("");
-
-    useEffect(() => {
-        const randomWords = getRandomWords();
-        setTextToType(randomWords);
-    }, []);
-
-    let [text, setText] = useState([]);
-
-    useEffect(() => {
-        setText(textToType.split("").map((letter) => ({ letter: letter, entered: "false" })));
-    }, [textToType]);
-
-    console.log(text);
-
-    let [currentLetter, setCurrentLetter] = useState(0);
+export function TypingArea({ setTimer, text, setText, textToType, setTextToType, getRandomWords }) {
+    const [currentLetter, setCurrentLetter] = useState(0);
 
     const resetBox = () => {
         const randomWords = getRandomWords();
         setTextToType(randomWords);
         setText(textToType.split("").map((letter) => ({ letter: letter, entered: "false" })));
         setCurrentLetter(0);
+        setTimer(0);
     }
 
     const addLetter = (letter) => {
@@ -52,7 +28,6 @@ export function TypingArea() {
             return { letter: data.letter, entered: correct ? "correct" : "wrong" };
         }));
         setCurrentLetter(currentLetter + 1);
-        console.log(currentLetter);
     }
 
     const deleteLetter = () => {
@@ -73,6 +48,11 @@ export function TypingArea() {
         }
         if (event.code === "Backspace") {
             deleteLetter();
+            return;
+        }
+        if (event.code === "Space") {
+            addLetter(" ");
+            event.preventDefault();
             return;
         }
         let letter = isLetter(event.code);
