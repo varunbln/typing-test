@@ -66,7 +66,7 @@ export function TypingArea({ setTimer, text, setText, textToType, setTextToType,
     }, [keyDownHandler]);
 
     return (
-        <div id="typing-area" autoFocus className="w-full h-full bg-inherit text-3xl pl-20 pr-20">
+        <div id="typing-area" className="w-full h-full bg-inherit text-lg sm:text-3xl sm:pl-20 sm:pr-20">
             {text.map((data, i) => {
                 return <span key={i} className={(i === currentLetter ? "animate-blink border-l-2" : "border-l-2 border-gray-900") + " " + (data.letter === " " ? "ml-[0.3rem]" : "ml-[0.05rem]") + " box-border " + (data.entered === "false" ? "text-gray-700" : (data.entered === "wrong" ? "text-red-900" : "text-gray-300"))}>{data.letter}</span>
             })}

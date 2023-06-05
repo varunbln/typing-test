@@ -16,7 +16,7 @@ const getRandomWords = () => {
 
 export function MainContent() {
 
-    const totalTime = 30;
+    const totalTime = 180;
 
     const [done, setDone] = useState(false);
     const [timer, setTimer] = useState(0);
@@ -37,13 +37,17 @@ export function MainContent() {
         return () => clearInterval(interval);
     }, [done]);
 
+    const resetBox = () => {
+        setTimer(0);
+        setDone(!done);
+        setWords(0);
+        setTextToType(getRandomWords());
+        setText(textToType.split("").map((letter) => ({ letter: letter, entered: "false" })));
+    }
+
     const keyDownHandler = useCallback((event) => {
         if (event.code === "Tab") {
-            setTimer(0);
-            setDone(!done);
-            setWords(0);
-            setTextToType(getRandomWords());
-            setText(textToType.split("").map((letter) => ({ letter: letter, entered: "false" })));
+            resetBox();
             event.preventDefault();
             return;
         }
@@ -111,27 +115,29 @@ export function MainContent() {
     }
 
     return (
-        <div className="row-span-1 col-span-6 grid grid-rows-[1fr_3fr_1fr] mt-10 mr-20 ml-20">
+        <div className="row-span-1 col-span-6 grid grid-rows-[0.1fr_4fr_1fr] sm:grid-rows-[0.5fr_4fr_1fr] mt-2 mr-4 ml-4 sm:mt-10 sm:mr-20 sm:ml-20">
             <div id="settings" className="row-span-1">
 
             </div>
             {done ?
                 <div id="stats-display">
-                    <div id="wpm-display" className="font-black text-8xl text-center text-gray-100 ">WPM: {calculateWPM()}</div>
-                    <div className="font-semibold text-2xl text-center mt-5 mb-8 text-gray-400">Raw WPM: {calculateRawWPM()}</div>
-                    <p className="text-center">WPM indicates the number of correct words typed per minute.</p>
+                    <div id="wpm-display" className="mt-20 font-black text-6xl sm:text-8xl text-center text-gray-100 ">WPM: {calculateWPM()}</div>
+                    <div className="font-semibold text-xl sm:text-2xl text-center mt-5 mb-8 text-gray-400">Raw WPM: {calculateRawWPM()}</div>
+                    <p className="text-center pb-8 sm:pb-0">WPM indicates the number of correct words typed per minute.</p>
                     <p className="text-center"> Raw WPM indicates the total number of words typed per minute, correct or not.</p>
                 </div> :
                 <div id="main-container">
                     <div id="timer">
-                        <p className="text-xl pl-20 text-gray-400 font-bold">Remaining Time: {calculateRemainingTime(timer)}</p>
+                        <p className="text-base sm:text-xl text-center mb-6 sm:mb-0 sm:pl-20 text-gray-400 font-bold">Remaining Time: {calculateRemainingTime(timer)}</p>
                     </div>
+                    <input type="text" hidden autoFocus></input>
                     <TypingArea setTimer={setTimer} setWords={setWords} text={text} setText={setText} textToType={textToType} setTextToType={setTextToType} getRandomWords={getRandomWords} />
                 </div>
             }
-            <div id="instructions" className="row-span-1">
-                <p className="text-center">Press <span className="text-gray-200">TAB</span> to restart test.</p>
-                <p className="text-center mt-5">By Varun Prahlad Balani:
+            <div id="instructions" className="row-span-1 flex flex-col sm:block mt-5 sm:mt-0">
+                <button className="p-3 bg-gray-800 sm:hidden" onClick={resetBox}>Restart Test</button>
+                <p className="text-center hidden sm:block">Press <span className="text-gray-200">TAB</span> to restart test.</p>
+                <p className="text-center mt-12 sm:mt-5">By Varun Prahlad Balani:
                     <a className="text-gray-200 pl-2" href="https://github.com/varun-balani"> Github</a>
                     <a className="text-gray-200 pl-3" href="https://www.linkedin.com/in/varun-prahlad-balani-961438200/">LinkedIn</a>
                 </p>
