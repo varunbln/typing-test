@@ -132,7 +132,7 @@ export function MainContent() {
             <div id="instructions" className="row-span-1">
                 <p className="text-center">Press <span className="text-gray-200">TAB</span> to restart test.</p>
                 <p className="text-center mt-5">By Varun Prahlad Balani:
-                    <a className="text-gray-200 pl-3" href="https://github.com/varun-balani"> Github</a>
+                    <a className="text-gray-200 pl-2" href="https://github.com/varun-balani"> Github</a>
                     <a className="text-gray-200 pl-3" href="https://www.linkedin.com/in/varun-prahlad-balani-961438200/">LinkedIn</a>
                 </p>
             </div>
