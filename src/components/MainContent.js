@@ -143,7 +143,7 @@ export function MainContent() {
                         <p className="text-base sm:text-xl text-left mb-6 sm:mb-0 sm:pl-20 text-gray-400 font-bold">Remaining Time: {calculateRemainingTime(timer)}</p>
                     </div>
                     <div id="main-box-container">
-                        <input id="fake-input-box" type="text" className="caret-transparent text-gray-900 bg-gray-900 hover:border-0 hover:bg-gray-900 focus:outline-none focus:border-0" autoFocus></input>
+                        <input id="fake-input-box" type="text" className="caret-transparent text-gray-900 bg-gray-900 hover:border-0 hover:bg-gray-900 focus:outline-none focus:border-0" spellCheck={false} autoFocus></input>
                         <TypingArea setTimer={setTimer} text={text} setText={setText} textToType={textToType} setTextToType={setTextToType} getRandomWords={getRandomWords} />
                     </div>
                 </div>
